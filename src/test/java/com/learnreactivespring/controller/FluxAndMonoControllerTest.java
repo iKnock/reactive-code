@@ -22,8 +22,8 @@ import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringRunner.class)
 /**@SpringBootTest
-@AutoConfigureWebTestClient
-@DirtiesContext**/
+ @AutoConfigureWebTestClient
+ @DirtiesContext**/
 @WebFluxTest //scan for classes annotated with @RestController, @Controller but not @Service or @Component
 public class FluxAndMonoControllerTest {
 
@@ -31,7 +31,7 @@ public class FluxAndMonoControllerTest {
     WebTestClient webTestClient;//non blocking client
 
     @Test
-    public void flux_approach1(){
+    public void flux_approach1() {
 
         Flux<Integer> intergerFlux = webTestClient.get().uri("/flux")
                 .accept(MediaType.APPLICATION_JSON_UTF8)
@@ -63,9 +63,9 @@ public class FluxAndMonoControllerTest {
     }*/
 
     @Test
-    public void flux_approach3(){
+    public void flux_approach3() {
 
-        List<Integer> expectedIntegerList = Arrays.asList(1,2,3,4);
+        List<Integer> expectedIntegerList = Arrays.asList(1, 2, 3, 4);
 
         EntityExchangeResult<List<Integer>> entityExchangeResult = webTestClient
                 .get().uri("/flux")
@@ -75,29 +75,28 @@ public class FluxAndMonoControllerTest {
                 .expectBodyList(Integer.class)
                 .returnResult();
 
-        assertEquals(expectedIntegerList,entityExchangeResult.getResponseBody());
+        assertEquals(expectedIntegerList, entityExchangeResult.getResponseBody());
     }
 
     @Test
-    public void flux_approach4(){
+    public void flux_approach4() {
 
-        List<Integer> expectedIntegerList = Arrays.asList(1,2,3,4);
+        List<Integer> expectedIntegerList = Arrays.asList(1, 2, 3, 4);
 
-         webTestClient
+        webTestClient
                 .get().uri("/flux")
                 .accept(MediaType.APPLICATION_JSON_UTF8)
                 .exchange()
                 .expectStatus().isOk()
                 .expectBodyList(Integer.class)
-                .consumeWith((response      ) -> {
+                .consumeWith((response) -> {
                     assertEquals(expectedIntegerList, response.getResponseBody());
                 });
 
     }
 
     @Test
-    public void fluxStream(){
-
+    public void fluxStream() {
         Flux<Long> longStreamFlux = webTestClient.get().uri("/fluxstream")
                 .accept(MediaType.APPLICATION_STREAM_JSON)
                 .exchange()
@@ -105,19 +104,16 @@ public class FluxAndMonoControllerTest {
                 .returnResult(Long.class)
                 .getResponseBody();
 
-
         StepVerifier.create(longStreamFlux)
                 .expectNext(0l)
                 .expectNext(1l)
                 .expectNext(2l)
                 .thenCancel()
                 .verify();
-
-
     }
 
     @Test
-    public void mono(){
+    public void mono() {
 
         Integer expectedValue = new Integer(1);
 
@@ -131,12 +127,6 @@ public class FluxAndMonoControllerTest {
                 });
 
     }
-
-
-
-
-
-
 
 
 }

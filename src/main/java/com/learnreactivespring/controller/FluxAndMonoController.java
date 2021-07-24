@@ -17,9 +17,9 @@ import java.time.Duration;
 public class FluxAndMonoController {
 
     @GetMapping("/flux")
-    public void returnFlux() {
+    public Flux<Integer> returnFlux() {
 
-        Subscriber subscriber = new Subscriber<Long>() {
+        /*Subscriber subscriber = new Subscriber<Long>() {
             @Override
             public void onSubscribe(Subscription s) {
                 s.request(1);
@@ -42,21 +42,23 @@ public class FluxAndMonoController {
             }
         };
 
-        Flux.interval(Duration.ofSeconds(1)).subscribe(subscriber);
+        Flux.interval(Duration.ofSeconds(1)).subscribe(subscriber);*/
+
+        return Flux.just(1, 2, 3, 4)
+                .delayElements(Duration.ofSeconds(1))
+                .log();
 
     }
 
     @GetMapping(value = "/fluxstream", produces = MediaType.APPLICATION_STREAM_JSON_VALUE)
     public Flux<Long> returnFluxStream() {
-        return Flux.just(1, 2, 3, 4, 5, 6).interval(Duration.ofSeconds(1)).log();
+        return Flux.interval(Duration.ofSeconds(1)).log();
     }
 
     @GetMapping("/mono")
     public Mono<Integer> returnMono() {
-
         return Mono.just(1)
                 .log();
-
     }
 
 }

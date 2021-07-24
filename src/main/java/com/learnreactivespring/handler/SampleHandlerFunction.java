@@ -11,7 +11,6 @@ import reactor.core.publisher.Mono;
 public class SampleHandlerFunction {
 
     public Mono<ServerResponse> flux(ServerRequest serverRequest) {
-
         return ServerResponse.ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(
